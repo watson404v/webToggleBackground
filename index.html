@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背景色切り替え</title>
+    <style>
+        body {
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        button {
+            margin-top: 20%;
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="toggleButton">クリックして色を切り替え</button>
+    <script>
+        let isRed = false;
+        document.getElementById("toggleButton").addEventListener("click", function() {
+            document.body.style.backgroundColor = isRed ? "blue" : "red";
+            isRed = !isRed;
+        });
+    </script>
+</body>
+</html>
