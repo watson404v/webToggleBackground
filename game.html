@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簡単な移動ゲーム</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #gameCanvas {
+            background-color: #fff;
+            border: 1px solid #000;
+        }
+        .character {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="500" height="500"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // キャラクターの初期位置
+        let x = 50;
+        let y = 50;
+        const speed = 5;
+
+        // キャラクターの描画
+        function drawCharacter() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // 画面のクリア
+            ctx.fillStyle = 'red';
+            ctx.fillRect(x, y, 50, 50);
+        }
+
+        // キー入力によるキャラクターの移動
+        function moveCharacter(event) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    if (y > 0) y -= speed;
+                    break;
+                case 'ArrowDown':
+                    if (y < canvas.height - 50) y += speed;
+                    break;
+                case 'ArrowLeft':
+                    if (x > 0) x -= speed;
+                    break;
+                case 'ArrowRight':
+                    if (x < canvas.width - 50) x += speed;
+                    break;
+            }
+            drawCharacter();
+        }
+
+        // イベントリスナーを追加してキー入力を監視
+        window.addEventListener('keydown', moveCharacter);
+
+        // ゲームの開始
+        drawCharacter();
+    </script>
+</body>
+</html>
+
