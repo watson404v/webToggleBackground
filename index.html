@@ -2,23 +2,86 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>トマト顔隠しアプリ 🍅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>トマトスタンプアプリ</title>
   <style>
-    body { text-align: center; font-family: Arial; }
-    canvas { border: 1px solid #ccc; margin-top: 10px; }
-    button { margin-top: 10px; padding: 10px 20px; }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    #canvas-container {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+    }
+    canvas {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+    }
+    #controls {
+      margin-top: 10px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
-  <h1>トマトで顔を隠そう！🍅</h1>
+  <h1>トマトスタンプアプリ</h1>
   <input type="file" id="upload" accept="image/*">
-  <br>
-  <canvas id="canvas"></canvas>
-  <br>
-  <button id="downloadBtn" style="display:none;">画像をダウンロード</button>
+  <div id="canvas-container">
+    <canvas id="canvas"></canvas>
+  </div>
+  <div id="controls">
+    <button id="download">ダウンロード</button>
+  </div>
 
-  <!-- MediaPipe & Script -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js"></script>
-  <script src="script.js"></script>
+  <script>
+    const uploadInput = document.getElementById('upload');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const downloadBtn = document.getElementById('download');
+
+    let tomatoImage = new Image();
+    tomatoImage.src = 'https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg'; // トマト画像のURL（著作権に注意）
+
+    uploadInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+      const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+      ctx.drawImage(tomatoImage, x - 25, y - 25, 50, 50); // トマトスタンプのサイズは50x50px
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = 'stamped_image.png';
+      link.click();
+    });
+  </script>
 </body>
 </html>
