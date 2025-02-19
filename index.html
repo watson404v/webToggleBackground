@@ -2,45 +2,23 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>物体認識デモ (TensorFlow.js)</title>
+  <title>トマト顔隠しアプリ 🍅</title>
   <style>
-    video, canvas { width: 640px; height: 480px; border: 1px solid black; }
+    body { text-align: center; font-family: Arial; }
+    canvas { border: 1px solid #ccc; margin-top: 10px; }
+    button { margin-top: 10px; padding: 10px 20px; }
   </style>
 </head>
 <body>
-  <h1>リアルタイム物体認識</h1>
-  <video id="video" autoplay></video>
+  <h1>トマトで顔を隠そう！🍅</h1>
+  <input type="file" id="upload" accept="image/*">
+  <br>
   <canvas id="canvas"></canvas>
+  <br>
+  <button id="downloadBtn" style="display:none;">画像をダウンロード</button>
 
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
-  <script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-
-    // カメラアクセス
-    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-      video.srcObject = stream;
-    });
-
-    // モデル読み込みと物体検出
-    cocoSsd.load().then(model => {
-      function detectFrame() {
-        model.detect(video).then(predictions => {
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-          predictions.forEach(pred => {
-            ctx.strokeStyle = 'red';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(...pred.bbox);  // バウンディングボックス描画
-            ctx.fillStyle = 'red';
-            ctx.fillText(pred.class, pred.bbox[0], pred.bbox[1]); // ラベル表示
-          });
-          requestAnimationFrame(detectFrame);
-        });
-      }
-      detectFrame();
-    });
-  </script>
+  <!-- MediaPipe & Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
